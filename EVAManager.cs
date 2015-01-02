@@ -43,6 +43,9 @@ namespace EVAManager
 
 		private const string empty = "";
 
+		private const string MODULE = "MODULE";
+		private const string RESOURCE = "RESOURCE";
+
 		private List<ConfigAction> evaConfigs;
 		private List<ConfigAction> passQueue;
 
@@ -81,7 +84,7 @@ namespace EVAManager
 					{
 						if (loadedPart.name.ToLower() == "kerbaleva")
 						{
-							Tools.PostDebugMessage(this, "Found {0}", loadedPart.name);
+							this.LogDebug("Found {0}", loadedPart.name);
 
 							evaPart = loadedPart.partPrefab;
 
@@ -129,7 +132,7 @@ namespace EVAManager
 
 						Match match = rgx.Match(urlConfig.type);
 
-						Tools.PostDebugMessage(this, "Found {0}match for {1}{2}",
+						this.LogDebug("Found {0}match for {1}{2}",
 							!match.Success ? "no " : "",
 							urlConfig.type,
 							!match.Success ? "" : string.Format(
@@ -156,29 +159,25 @@ namespace EVAManager
 					{
 						if (action.Operator == "DELETE")
 						{
-							Tools.PostDebugMessage(this, "Trying delete action on {0}", action);
+							this.LogDebug("Trying delete action on {0}", action);
 
 							if (action.MatchName == string.Empty)
 							{
-								Debug.LogWarning(string.Format(
-									"[{0}] match name required for 'delete' action but not present; ignoring.",
-									this.GetType().Name));
+								this.LogWarning("Match name required for 'delete' action but not present; ignoring.");
 								continue;
 							}
 
 							switch (action.ClassType)
 							{
-								case "MODULE":
+								case MODULE:
 									this.delModuleByName(action.MatchName);
 									break;
-								case "RESOURCE":
+								case RESOURCE:
 									this.delResourceByName(action.MatchName);
 									break;
 								default:
-									Debug.LogWarning(string.Format(
-										"[{0}] Class type '{1}' not implemented for 'delete' action.",
-										this.GetType().Name,
-										action.ClassType));
+									this.LogWarning("Class type '{0}' not implemented for 'delete' action.",
+										action.ClassType);
 									continue;
 							}
 						}
@@ -191,29 +190,25 @@ namespace EVAManager
 					{
 						if (action.Operator == "EDIT")
 						{
-							Tools.PostDebugMessage(this, "Trying edit action on {0}", action);
+							this.LogDebug("Trying edit action on {0}", action);
 
 							if (action.MatchName == string.Empty)
 							{
-								Debug.LogWarning(string.Format(
-									"[{0}] match name required for 'edit' action but not present; ignoring.",
-									this.GetType().Name));
+								this.LogWarning("Match name required for 'edit' action but not present; ignoring.");
 								continue;
 							}
 
 							switch (action.ClassType)
 							{
-								case "MODULE":
+								case MODULE:
 									this.editModuleByNameFromConfig(action.MatchName, action.Node);
 									break;
-								case "RESOURCE":
+								case RESOURCE:
 									this.editResourceByNameFromConfig(action.MatchName, action.Node);
 									break;
 								default:
-									Debug.LogWarning(string.Format(
-										"[{0}] Class type '{1}' not implemented for 'delete' action.",
-										this.GetType().Name,
-										action.ClassType));
+									this.LogWarning("Class type '{0}' not implemented for 'delete' action.",
+										action.ClassType);
 									continue;
 							}
 						}
@@ -227,25 +222,21 @@ namespace EVAManager
 						{
 							if (action.MatchName != string.Empty)
 							{
-								Debug.LogWarning(string.Format(
-									"[{0}] match name ('{1}') not used for 'add' action; ignoring.",
-									this.GetType().Name,
-									action.MatchName));
+								this.LogWarning("match name ('{0}') not used for 'add' action; ignoring.",
+									action.MatchName);
 							}
 
 							switch (action.ClassType)
 							{
-								case "MODULE":
+								case MODULE:
 									this.addModuleFromConfig(action.Node);
 									break;
-								case "RESOURCE":
+								case RESOURCE:
 									this.addResourceFromConfig(action.Node);
 									break;
 								default:
-									Debug.LogWarning(string.Format(
-										"[{0}] Class type '{1}' not implemented for 'add' action.",
-										this.GetType().Name,
-										action.ClassType));
+									this.LogWarning("Class type '{0}' not implemented for 'add' action.",
+										action.ClassType);
 									continue;
 							}
 						}
@@ -280,7 +271,7 @@ namespace EVAManager
 
 					GameObject.Destroy(this);
 
-					Tools.PostDebugMessage(this, "Destruction Requested.");
+					this.LogDebug("Destruction Requested.");
 					break;
 			}
 		}
@@ -293,11 +284,7 @@ namespace EVAManager
 			{
 				if (evaPart.GetComponents<PartModule>().Any(m => m.GetType().Name == moduleName))
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}] Skipping module {1}: already present in kerbalEVA",
-						this.GetType().Name,
-						moduleName
-					));
+					this.LogWarning("Skipping module {1}: already present in kerbalEVA", moduleName);
 					return;
 				}
 
@@ -305,11 +292,7 @@ namespace EVAManager
 
 				if (moduleClass == null)
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}] Skipping module {1}: class not found in loaded assemblies.",
-						this.GetType().Name,
-						moduleName
-					));
+					this.LogWarning("Skipping module {0}: class not found in loaded assemblies.", moduleName);
 					return;
 				}
 
@@ -329,10 +312,7 @@ namespace EVAManager
 				}
 				catch (Exception ex)
 				{
-					Debug.Log(string.Format(
-						"TweakableEVAManager handled exception {0} while adding modules to kerbalEVA.",
-						ex.GetType().Name
-					));
+					this.LogError("Handled exception {0} while adding modules to kerbalEVA.", ex.GetType().Name);
 
 					#if DEBUG
 					Debug.LogException(ex);
@@ -341,26 +321,16 @@ namespace EVAManager
 
 				if (evaPart.GetComponents<PartModule>().Any(m => m.GetType().Name == moduleName))
 				{
-					Debug.Log(string.Format("[{0}] added module {1} to kerbalEVA part.",
-						this.GetType().Name,
-						moduleName
-					));
+					this.Log("Added module {0} to kerbalEVA part.",	moduleName);
 				}
 				else
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}] failed to add {1} to kerbalEVA part.",
-						this.GetType().Name,
-						moduleName
-					));
+					this.LogWarning("Failed to add {0} to kerbalEVA part.", moduleName);
 				}
 			}
 			else
 			{
-				Debug.Log(string.Format(
-					"[{0}] Skipping malformed EVA_MODULE node: missing 'name' field.",
-					this.GetType().Name
-				));
+				this.LogWarning("Skipping malformed EVA_MODULE node: missing 'name' field.");
 				return;
 			}
 		}
@@ -371,57 +341,43 @@ namespace EVAManager
 
 			if (evaResourceNode.TryGetValue("name", out resourceName))
 			{
-				Tools.PostDebugMessage(this, "Adding resource '{0}'", resourceName);
+				this.LogDebug("Adding resource '{0}'", resourceName);
 
 				PartResourceDefinition resourceInfo =
 					PartResourceLibrary.Instance.GetDefinition(resourceName);
 
 				if (resourceInfo == null)
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}]: Skipping resource {1}: definition not present in library.",
-						this.GetType().Name,
-						resourceName
-					));
+					this.LogWarning("Skipping resource {0}: definition not present in library.", resourceName);
 
 					return;
 				}
 
-				Tools.PostDebugMessage(this, "Resource '{0}' is in library.", resourceName);
+				this.LogDebug("Resource '{0}' is in library.", resourceName);
 
 				if (evaPart.GetComponents<PartResource>().Any(r => r.resourceName == resourceName))
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}] Skipping resource {1}: already present in kerbalEVA.",
-						this.GetType().Name,
-						resourceName
-					));
+					this.LogWarning("Skipping resource {0}: already present in kerbalEVA.", resourceName);
 
 					return;
 				}
 
-				Tools.PostDebugMessage(this, "Resource '{0}' is not present.", resourceName);
+				this.LogDebug("Resource '{0}' is not present.", resourceName);
 
 				PartResource resource = evaPart.gameObject.AddComponent<EVAPartResource>();
 
-				Tools.PostDebugMessage(this, "Resource '{0}' component built.", resourceName);
+				this.LogDebug("Resource '{0}' component built.", resourceName);
 
 				resource.SetInfo(resourceInfo);
 				((EVAPartResource)resource).Load(evaResourceNode);
 
-				Debug.Log(string.Format("[{0}] Added resource {1} to kerbalEVA part.",
-					this.GetType().Name,
-					resource.resourceName
-				));
+				this.Log("Added resource {0} to kerbalEVA part.", resource.resourceName);
 
-				Tools.PostDebugMessage(this, "Resource '{0}' loaded.", resourceName);
+				this.LogDebug("Resource '{0}' loaded.", resourceName);
 			}
 			else
 			{
-				Debug.Log(string.Format(
-					"[{0}] Skipping malformed EVA_RESOURCE node: missing 'name' field.",
-					this.GetType().Name
-				));
+				this.Log("Skipping malformed EVA_RESOURCE node: missing 'name' field.");
 				return;
 			}
 		}
@@ -463,9 +419,9 @@ namespace EVAManager
 
 					GameObject.Destroy(module);
 
-					Tools.PostDebugMessage(this, "EVA module {0} marked for destruction.", module.GetType().Name);
+					this.LogDebug("EVA module {0} marked for destruction.", module.GetType().Name);
 
-					ConfigAction copyAction = new ConfigAction(empty, "MODULE", empty, config);
+					ConfigAction copyAction = new ConfigAction(empty, MODULE, empty, config);
 
 					this.passQueue.Add(copyAction);
 
@@ -495,9 +451,9 @@ namespace EVAManager
 
 					GameObject.Destroy(resource);
 
-					Tools.PostDebugMessage(this, "EVA resource {0} marked for destruction.", resource.resourceName);
+					this.LogDebug("EVA resource {0} marked for destruction.", resource.resourceName);
 
-					ConfigAction copyAction = new ConfigAction(empty, "RESOURCE", empty, config);
+					ConfigAction copyAction = new ConfigAction(empty, RESOURCE, empty, config);
 
 					this.passQueue.Add(copyAction);
 
@@ -580,28 +536,21 @@ namespace EVAManager
 
 						success &= true;
 
-						Tools.PostDebugMessage(this, "Assigned field '{0}' with new value '{1}'.", namedField.Name, convertedValue);
+						this.LogDebug("Assigned field '{0}' with new value '{1}'.", namedField.Name, convertedValue);
 					}
 					else
 					{
-						Debug.LogWarning(string.Format(
-							"[{0}] Failed assigning value '{1}': field not found in class '{2}'",
-							this.GetType().Name,
+						this.LogWarning("Failed assigning value '{0}': field not found in class '{1}'",
 							cfgValue.name,
 							obj.GetType().Name
-						));
+						);
 
 						success &= false;
 					}
 				}
 				catch (Exception ex)
 				{
-					Debug.LogWarning(string.Format(
-						"[{0}] Failed assigning value '{1}': {2}",
-						this.GetType().Name,
-						cfgValue.name,
-						ex.Message
-					));
+					this.LogWarning("Failed assigning value '{0}': {1}", cfgValue.name,	ex.Message);
 
 					success &= false;
 
@@ -674,7 +623,7 @@ namespace EVAManager
 		#if DEBUG
 		public void OnDestroy()
 		{
-			Tools.PostDebugMessage(this, "Destroyed.");
+			this.LogDebug("Destroyed.");
 		}
 		#endif
 
