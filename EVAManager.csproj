@@ -23,8 +23,8 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy /y ${ProjectDir}\EVAManager.cfg C:\Users\andy\Games\KSP_win\GameData\EVAManager\" />
-        <Command type="AfterBuild" command="xcopy /y ${TargetFile} C:\Users\andy\Games\KSP_win\GameData\EVAManager\" />
+        <Command type="AfterBuild" command="xcopy /y ${ProjectDir}\EVAManager.cfg ${ProjectDir}\GameData\EVAManager\" />
+        <Command type="AfterBuild" command="xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -37,8 +37,8 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy /y ${TargetFile} C:\Users\andy\Games\KSP_win\GameData\EVAManager\" />
-        <Command type="AfterBuild" command="xcopy /y ${ProjectDir}\EVAManager.cfg C:\Users\andy\Games\KSP_win\GameData\EVAManager\" />
+        <Command type="AfterBuild" command="xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\" />
+        <Command type="AfterBuild" command="xcopy /y ${ProjectDir}\EVAManager.cfg ${ProjectDir}\GameData\EVAManager\" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
