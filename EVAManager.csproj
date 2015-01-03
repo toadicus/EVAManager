@@ -92,9 +92,6 @@
       <Link>ConfigNodeExtensions.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="EVAManager.cfg" />
-  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -104,4 +101,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <None Include="GameData\EVAManager\EVAManager.cfg" />
+  </ItemGroup>
 </Project>
