@@ -51,7 +51,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="cp -vfa ${ProjectDir}/EVAManager.cfg ${TargetFile} /opt/games/KSP_testing/GameData/EVAManager/" />
+        <Command type="AfterBuild" command="cp -vfa ${ProjectDir}/EVAManager.cfg ${TargetFile} ${ProjectDir}/GameData/EVAManager/" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -66,7 +66,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="cp -vfa ${ProjectDir}/EVAManager.cfg ${TargetFile} /opt/games/KSP_testing/GameData/EVAManager/" />
+        <Command type="AfterBuild" command="cp -vfa ${ProjectDir}/EVAManager.cfg ${TargetFile} ${ProjectDir}/GameData/EVAManager/" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
