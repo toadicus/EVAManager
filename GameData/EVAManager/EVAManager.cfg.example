@@ -1,6 +1,6 @@
 ﻿// EVAManager
 //
-// EVAPartModule.cfg
+// EVAManager.cfg
 //
 // Copyright © 2014, toadicus
 // All rights reserved.
@@ -23,6 +23,10 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// This is a fun proof-of-concept patch set that adds EVA Propellant to parts that house Kerbals.  This requires you to
+// ration EVA fuel over the course of a mission inside of individual jaunts.  If you like the idea, rename this file to
+// remove the .example extension!
+
 DELETE_EVA_RESOURCE[EVA\sPropellant] {}
 
 EVA_RESOURCE
@@ -32,42 +36,19 @@ EVA_RESOURCE
 	maxAmount = 5
 }
 
-@PART[*]:HAS[#CrewCapacity[1]]
+@PART[*]:HAS[#CrewCapacity[>0]]
 {
 	RESOURCE
 	{
 		name = EVA Propellant
 		amount = 5
+		@amount *= #$/CrewCapacity$
 		maxAmount = 5
+		@maxAmount *= #$/CrewCapacity$
 	}
 }
 
-@PART[*]:HAS[#CrewCapacity[2]]
+@RESOURCE_DEFINITION[EVA*Propellant]
 {
-	RESOURCE
-	{
-		name = EVA Propellant
-		amount = 10
-		maxAmount = 10
-	}
-}
-
-@PART[*]:HAS[#CrewCapacity[3]]
-{
-	RESOURCE
-	{
-		name = EVA Propellant
-		amount = 15
-		maxAmount = 15
-	}
-}
-
-@PART[*]:HAS[#CrewCapacity[4]]
-{
-	RESOURCE
-	{
-		name = EVA Propellant
-		amount = 20
-		maxAmount = 20
-	}
+	@density = 0.000807
 }

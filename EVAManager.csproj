@@ -100,6 +100,9 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <None Include="GameData\EVAManager\EVAManager.cfg" />
+    <Folder Include="GameData\EVAManager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GameData\EVAManager\EVAManager.cfg.example" />
   </ItemGroup>
 </Project>
