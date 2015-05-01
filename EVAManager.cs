@@ -49,7 +49,7 @@ namespace EVAManager
 		private List<ConfigAction> evaConfigs;
 		private List<ConfigAction> passQueue;
 
-		private Part evaPart;
+		private List<Part> evaParts;
 
 		private Pass pass;
 
@@ -57,6 +57,7 @@ namespace EVAManager
 		{
 			pass = Pass.Collect;
 			this.passQueue = new List<ConfigAction>();
+			this.evaParts = new List<Part>();
 		}
 
 		public virtual void Update()
@@ -82,11 +83,13 @@ namespace EVAManager
 				case Pass.Collect:
 					foreach (var loadedPart in PartLoader.LoadedPartsList)
 					{
-						if (loadedPart.name.ToLower() == "kerbaleva")
+						string lowerName = loadedPart.name.ToLower();
+
+						if (lowerName == "kerbaleva" || lowerName == "kerbalevafemale")
 						{
 							this.LogDebug("Found {0}", loadedPart.name);
 
-							evaPart = loadedPart.partPrefab;
+							evaParts.Add(loadedPart.partPrefab);
 
 							#if DEBUG
 							log = Tools.DebugLogger.New(this);
@@ -113,7 +116,10 @@ namespace EVAManager
 							log.Print();
 							#endif
 
-							break;
+							if (this.evaParts.Count == 2)
+							{
+								break;
+							}
 						}
 					}
 
@@ -170,10 +176,12 @@ namespace EVAManager
 							switch (action.ClassType)
 							{
 								case MODULE:
-									this.delModuleByName(action.MatchName);
+									this.delModuleByName(evaParts[0], action.MatchName);
+									this.delModuleByName(evaParts[1], action.MatchName);
 									break;
 								case RESOURCE:
-									this.delResourceByName(action.MatchName);
+									this.delResourceByName(evaParts[0], action.MatchName);
+									this.delResourceByName(evaParts[1], action.MatchName);
 									break;
 								default:
 									this.LogWarning("Class type '{0}' not implemented for 'delete' action.",
@@ -201,10 +209,12 @@ namespace EVAManager
 							switch (action.ClassType)
 							{
 								case MODULE:
-									this.editModuleByNameFromConfig(action.MatchName, action.Node);
+									this.editModuleByNameFromConfig(evaParts[0], action.MatchName, action.Node);
+									this.editModuleByNameFromConfig(evaParts[1], action.MatchName, action.Node);
 									break;
 								case RESOURCE:
-									this.editResourceByNameFromConfig(action.MatchName, action.Node);
+									this.editResourceByNameFromConfig(evaParts[0], action.MatchName, action.Node);
+									this.editResourceByNameFromConfig(evaParts[1], action.MatchName, action.Node);
 									break;
 								default:
 									this.LogWarning("Class type '{0}' not implemented for 'delete' action.",
@@ -229,10 +239,12 @@ namespace EVAManager
 							switch (action.ClassType)
 							{
 								case MODULE:
-									this.addModuleFromConfig(action.Node);
+									this.addModuleFromConfig(evaParts[0], action.Node);
+									this.addModuleFromConfig(evaParts[1], action.Node);
 									break;
 								case RESOURCE:
-									this.addResourceFromConfig(action.Node);
+									this.addResourceFromConfig(evaParts[0], action.Node);
+									this.addResourceFromConfig(evaParts[1], action.Node);
 									break;
 								default:
 									this.LogWarning("Class type '{0}' not implemented for 'add' action.",
@@ -276,7 +288,7 @@ namespace EVAManager
 			}
 		}
 
-		private void addModuleFromConfig(ConfigNode evaModuleNode)
+		private void addModuleFromConfig(Part evaPart, ConfigNode evaModuleNode)
 		{
 			string moduleName;
 
@@ -335,7 +347,7 @@ namespace EVAManager
 			}
 		}
 
-		private void addResourceFromConfig(ConfigNode evaResourceNode)
+		private void addResourceFromConfig(Part evaPart, ConfigNode evaResourceNode)
 		{
 			string resourceName;
 
@@ -382,9 +394,9 @@ namespace EVAManager
 			}
 		}
 
-		private void delModuleByName(string matchName)
+		private void delModuleByName(Part evaPart, string matchName)
 		{
-			PartModule module = this.matchFirstModuleByName(matchName);
+			PartModule module = this.matchFirstModuleByName(evaPart, matchName);
 
 			if (module != null)
 			{
@@ -392,9 +404,9 @@ namespace EVAManager
 			}
 		}
 
-		private void delResourceByName(string matchName)
+		private void delResourceByName(Part evaPart, string matchName)
 		{
-			PartResource resource = this.matchFirstResourceByName(matchName);
+			PartResource resource = this.matchFirstResourceByName(evaPart, matchName);
 
 			if (resource != null)
 			{
@@ -407,9 +419,9 @@ namespace EVAManager
 			}
 		}
 
-		private void editModuleByNameFromConfig(string matchName, ConfigNode config)
+		private void editModuleByNameFromConfig(Part evaPart, string matchName, ConfigNode config)
 		{
-			PartModule module = this.matchFirstModuleByName(matchName);
+			PartModule module = this.matchFirstModuleByName(evaPart, matchName);
 
 			if (module != null)
 			{
@@ -439,9 +451,9 @@ namespace EVAManager
 			}
 		}
 
-		private void editResourceByNameFromConfig(string matchName, ConfigNode config)
+		private void editResourceByNameFromConfig(Part evaPart, string matchName, ConfigNode config)
 		{
-			PartResource resource = this.matchFirstResourceByName(matchName);
+			PartResource resource = this.matchFirstResourceByName(evaPart, matchName);
 
 			if (resource != null)
 			{
@@ -471,7 +483,7 @@ namespace EVAManager
 			}
 		}
 
-		private PartModule matchFirstModuleByName(string matchName)
+		private PartModule matchFirstModuleByName(Part evaPart, string matchName)
 		{
 			Regex rgx = new Regex(@matchName);
 
@@ -488,7 +500,7 @@ namespace EVAManager
 			return null;
 		}
 
-		private PartResource matchFirstResourceByName(string matchName)
+		private PartResource matchFirstResourceByName(Part evaPart, string matchName)
 		{
 			Regex rgx = new Regex(@matchName);
 
