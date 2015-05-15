@@ -78,11 +78,15 @@ namespace EVAManager
 				this.passQueue.Clear();
 			}
 
+			ConfigAction action;
+
 			switch (pass)
 			{
 				case Pass.Collect:
-					foreach (var loadedPart in PartLoader.LoadedPartsList)
+					AvailablePart loadedPart;
+					for (int idx = 0; idx < PartLoader.LoadedPartsList.Count; idx++)
 					{
+						loadedPart = PartLoader.LoadedPartsList[operatorIdx];
 						string lowerName = loadedPart.name.ToLower();
 
 						if (lowerName == "kerbaleva" || lowerName == "kerbalevafemale")
@@ -127,8 +131,11 @@ namespace EVAManager
 
 					Regex rgx = new Regex(patchPattern);
 
-					foreach (var urlConfig in GameDatabase.Instance.root.AllConfigs)
+					UrlDir.UrlConfig urlConfig;
+					IEnumerator<UrlDir.UrlConfig> enumerator = GameDatabase.Instance.root.AllConfigs.GetEnumerator();
+					while (enumerator.MoveNext())
 					{
+						urlConfig = enumerator.Current;
 						Tools.PostDebugMessage(
 							this,
 							"Checking urlconfig; name: {0}, type: {1}, config.name: {2}",
@@ -161,8 +168,9 @@ namespace EVAManager
 					pass = Pass.Delete;
 					break;
 				case Pass.Delete:
-					foreach (ConfigAction action in this.evaConfigs)
+					for (int idx = 0; idx < this.evaConfigs.Count; idx++)
 					{
+						action = this.evaConfigs[idx];
 						if (action.Operator == "DELETE")
 						{
 							this.LogDebug("Trying delete action on {0}", action);
@@ -194,8 +202,9 @@ namespace EVAManager
 					pass = Pass.Edit;
 					break;
 				case Pass.Edit:
-					foreach (ConfigAction action in this.evaConfigs)
+					for (int idx = 0; idx < this.evaConfigs.Count; idx++)
 					{
+						action = this.evaConfigs[idx];
 						if (action.Operator == "EDIT")
 						{
 							this.LogDebug("Trying edit action on {0}", action);
@@ -226,8 +235,9 @@ namespace EVAManager
 					pass = Pass.Insert;
 					break;
 				case Pass.Insert:
-					foreach (ConfigAction action in this.evaConfigs)
+					for (int idx = 0; idx < this.evaConfigs.Count; idx++)
 					{
+						action = this.evaConfigs[idx];
 						if (action.Operator == empty)
 						{
 							if (action.MatchName != string.Empty)
@@ -487,8 +497,11 @@ namespace EVAManager
 		{
 			Regex rgx = new Regex(@matchName);
 
-			foreach (PartModule module in evaPart.GetComponents<PartModule>())
+			PartModule[] modules = evaPart.GetComponents<PartModule>();
+			PartModule module;
+			for (int idx = 0; idx < modules.Length; idx++)
 			{
+				module = modules[idx];
 				Match match = rgx.Match(module.GetType().Name);
 
 				if (match.Success)
@@ -504,8 +517,11 @@ namespace EVAManager
 		{
 			Regex rgx = new Regex(@matchName);
 
-			foreach (PartResource resource in evaPart.GetComponents<PartResource>())
+			PartResource[] resources = evaPart.GetComponents<PartResource>();
+			PartResource resource;
+			for (int idx = 0; idx < resources.Length; idx++)
 			{
+				resource = resources[idx];
 				Match match = rgx.Match(resource.resourceName);
 
 				Tools.PostDebugMessage(
@@ -527,8 +543,10 @@ namespace EVAManager
 		{
 			bool success = true;
 
-			foreach (ConfigNode.Value cfgValue in config.values)
+			ConfigNode.Value cfgValue;
+			for (int idx = 0; idx < config.values.Count; idx++)
 			{
+				cfgValue = config.values[idx];
 				try
 				{
 					var namedField = obj.GetType().GetField(cfgValue.name,
@@ -577,8 +595,10 @@ namespace EVAManager
 
 		private ConfigNode mergeConfigs(ConfigNode source, ConfigNode target)
 		{
-			foreach (ConfigNode.Value value in target.values)
+			ConfigNode.Value value;
+			for (int idx = 0; idx < target.values.Count; idx++)
 			{
+				value = target.values[idx];
 				if (source.HasValue(value.name))
 				{
 					source.RemoveValue(value.name);
@@ -612,14 +632,22 @@ namespace EVAManager
 
 			source.AddValue("name", module.GetType().Name);
 
-			foreach (var field in module.GetType().GetFields(
+			System.Reflection.FieldInfo[] fieldInfos = module.GetType().GetFields(
 				System.Reflection.BindingFlags.Public |
 				System.Reflection.BindingFlags.NonPublic |
 				System.Reflection.BindingFlags.Instance
-			))
+			);
+			System.Reflection.FieldInfo field;
+			for (int fIdx = 0; fIdx < fieldInfos.Length; fIdx++)
 			{
-				foreach (object attr in field.GetCustomAttributes(true))
+				field = fieldInfos[fIdx];
+
+				object[] attrs = field.GetCustomAttributes(true);
+				object attr;
+				for (int aIdx = 0; aIdx < attrs.Length; aIdx++)
 				{
+					attr = attrs[aIdx];
+
 					if (attr is KSPField)
 					{
 						source.AddValue(field.Name, field.GetValue(module));
