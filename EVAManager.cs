@@ -334,7 +334,8 @@ namespace EVAManager
 				}
 				catch (Exception ex)
 				{
-					this.LogError("Handled exception {0} while adding modules to kerbalEVA.", ex.GetType().Name);
+					this.LogError("Handled exception {0} while adding modules to {1}.",
+						ex.GetType().Name, evaPart);
 
 					#if DEBUG
 					Debug.LogException(ex);
@@ -343,11 +344,11 @@ namespace EVAManager
 
 				if (evaPart.GetComponents<PartModule>().Any(m => m.GetType().Name == moduleName))
 				{
-					this.Log("Added module {0} to kerbalEVA part.",	moduleName);
+					this.Log("Added module {0} to {1}.", moduleName, evaPart);
 				}
 				else
 				{
-					this.LogWarning("Failed to add {0} to kerbalEVA part.", moduleName);
+					this.LogWarning("Failed to add {0} to {1}.", moduleName, evaPart);
 				}
 			}
 			else
@@ -393,7 +394,7 @@ namespace EVAManager
 				resource.SetInfo(resourceInfo);
 				((EVAPartResource)resource).Load(evaResourceNode);
 
-				this.Log("Added resource {0} to kerbalEVA part.", resource.resourceName);
+				this.Log("Added resource {0} to {1}", resource.resourceName, evaPart);
 
 				this.LogDebug("Resource '{0}' loaded.", resourceName);
 			}
