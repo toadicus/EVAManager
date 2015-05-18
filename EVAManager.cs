@@ -86,7 +86,7 @@ namespace EVAManager
 					AvailablePart loadedPart;
 					for (int idx = 0; idx < PartLoader.LoadedPartsList.Count; idx++)
 					{
-						loadedPart = PartLoader.LoadedPartsList[operatorIdx];
+						loadedPart = PartLoader.LoadedPartsList[idx];
 						string lowerName = loadedPart.name.ToLower();
 
 						if (lowerName == "kerbaleva" || lowerName == "kerbalevafemale")
