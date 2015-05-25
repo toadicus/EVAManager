@@ -304,11 +304,11 @@ namespace EVAManager
 
 			if (evaModuleNode.TryGetValue("name", out moduleName))
 			{
-				if (evaPart.GetComponents<PartModule>().Any(m => m.GetType().Name == moduleName))
+				/*if (evaPart.GetComponents<PartModule>().Any(m => m.GetType().Name == moduleName))
 				{
-					this.LogWarning("Skipping module {1}: already present in kerbalEVA", moduleName);
+					this.LogWarning("Skipping module {0}: already present in kerbalEVA", moduleName);
 					return;
-				}
+				}*/
 
 				Type moduleClass = AssemblyLoader.GetClassByName(typeof(PartModule), moduleName);
 
@@ -411,7 +411,10 @@ namespace EVAManager
 
 			if (module != null)
 			{
-				GameObject.Destroy(module);
+				evaPart.Modules.Remove(module);
+				GameObject.DestroyImmediate(module);
+
+				this.Log("Removed module {0} from {1} and marked for destruction.", matchName, evaPart);
 			}
 		}
 
@@ -421,12 +424,10 @@ namespace EVAManager
 
 			if (resource != null)
 			{
+				evaPart.Resources.list.Remove(resource);
 				GameObject.Destroy(resource);
 
-				Tools.PostDebugMessage(
-					this,
-					"EVA resource {0} marked for destruction.",
-					resource.resourceName);
+				this.Log("Removed resource {0} from {1} and marked for destruction.", matchName, evaPart);
 			}
 		}
 
