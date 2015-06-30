@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ToadicusTools;
+using ToadicusTools.Extensions;
 using UnityEngine;
 
 namespace EVAManager
@@ -68,7 +69,7 @@ namespace EVAManager
 			}
 
 			#if DEBUG
-			Tools.DebugLogger log;
+			Logging.DebugLogger log;
 			#endif
 
 			if (this.passQueue.Count > 0 && this.evaConfigs != null)
@@ -96,7 +97,7 @@ namespace EVAManager
 							evaParts.Add(loadedPart.partPrefab);
 
 							#if DEBUG
-							log = Tools.DebugLogger.New(this);
+							log = Logging.DebugLogger.New(this);
 
 							log.AppendLine("Modules before run:");
 
@@ -136,7 +137,7 @@ namespace EVAManager
 					while (enumerator.MoveNext())
 					{
 						urlConfig = enumerator.Current;
-						Tools.PostDebugMessage(
+						Logging.PostDebugMessage(
 							this,
 							"Checking urlconfig; name: {0}, type: {1}, config.name: {2}",
 							urlConfig.name,
@@ -267,7 +268,7 @@ namespace EVAManager
 					break;
 				case Pass.Done:
 					#if DEBUG
-					log = Tools.DebugLogger.New(this);
+					log = Logging.DebugLogger.New(this);
 
 					log.AppendLine("Modules after run:");
 
@@ -449,7 +450,7 @@ namespace EVAManager
 
 					this.passQueue.Add(copyAction);
 
-					Tools.PostDebugMessage(
+					Logging.PostDebugMessage(
 						this,
 						"EVA module {0} marked for insertion\n(action: {1})",
 						config.GetValue("name"),
@@ -481,7 +482,7 @@ namespace EVAManager
 
 					this.passQueue.Add(copyAction);
 
-					Tools.PostDebugMessage(
+					Logging.PostDebugMessage(
 						this,
 						"EVA resource {0} marked for insertion\n(action: {1})",
 						config.GetValue("name"),
@@ -526,7 +527,7 @@ namespace EVAManager
 				resource = resources[idx];
 				Match match = rgx.Match(resource.resourceName);
 
-				Tools.PostDebugMessage(
+				Logging.PostDebugMessage(
 					this,
 					"EVA resource {0} is {1}a match for action.",
 					resource.resourceName,

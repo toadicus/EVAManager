@@ -26,6 +26,7 @@
 using KSP;
 using System;
 using ToadicusTools;
+using ToadicusTools.Extensions;
 using UnityEngine;
 
 namespace EVAManager
@@ -49,7 +50,7 @@ namespace EVAManager
 
 				baseAwake.Invoke(this, null);
 
-				Tools.PostDebugMessage(this, "base Awake.");
+				Logging.PostDebugMessage(this, "base Awake.");
 			}
 			#if DEBUG
 			catch (Exception ex)
@@ -69,7 +70,7 @@ namespace EVAManager
 			GameEvents.onCrewOnEva.Add(this.onEvaHandler);
 			GameEvents.onCrewBoardVessel.Add(this.onBoardHandler);
 
-			Tools.PostDebugMessage(this, "Awake");
+			Logging.PostDebugMessage(this, "Awake");
 		}
 
 		public void OnDestroy()
@@ -84,7 +85,7 @@ namespace EVAManager
 
 			this.FillFromPod = node.GetValue("FillFromPod", this.FillFromPod);
 
-			Tools.PostDebugMessage(this, "Loaded.");
+			Logging.PostDebugMessage(this, "Loaded.");
 		}
 
 		public new void Save(ConfigNode node)
@@ -100,7 +101,7 @@ namespace EVAManager
 				node.AddValue("FillFromPod", this.FillFromPod.ToString());
 			}
 
-			Tools.PostDebugMessage(this, "Saved.");
+			Logging.PostDebugMessage(this, "Saved.");
 		}
 
 		private void onEvaHandler(GameEvents.FromToAction<Part, Part> data)
@@ -128,7 +129,7 @@ namespace EVAManager
 
 					this.amount += gotAmount;
 
-					Tools.PostDebugMessage(this, "Filled {0} {1} from {2}",
+					Logging.PostDebugMessage(this, "Filled {0} {1} from {2}",
 						gotAmount,
 						this.resourceName,
 						data.to.partInfo.title
@@ -155,7 +156,7 @@ namespace EVAManager
 
 					this.amount += sentAmount;
 
-					Tools.PostDebugMessage(this, "Returned {0} {1} to {2}",
+					Logging.PostDebugMessage(this, "Returned {0} {1} to {2}",
 						-sentAmount,
 						this.resourceName,
 						data.to.partInfo.title

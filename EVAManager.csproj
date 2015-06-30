@@ -82,12 +82,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EVAManager.cs" />
-    <Compile Include="..\ToadicusTools\Tools.cs">
-      <Link>Tools.cs</Link>
-    </Compile>
     <Compile Include="EVAPartResource.cs" />
-    <Compile Include="..\ToadicusTools\ConfigNodeExtensions.cs">
-      <Link>ConfigNodeExtensions.cs</Link>
+    <Compile Include="..\ToadicusTools\Extensions\ComponentExtensions.cs">
+      <Link>ToadicusTools\ComponentExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Enums.cs">
+      <Link>ToadicusTools\Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Text\Extensions.cs">
+      <Link>ToadicusTools\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Logging.cs">
+      <Link>ToadicusTools\Logging.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\MathTools.cs">
+      <Link>ToadicusTools\MathTools.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\MuMechTools\MuMech_Tools.cs">
+      <Link>ToadicusTools\MuMech_Tools.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Extensions\PartExtensions.cs">
+      <Link>ToadicusTools\PartExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Debug\PooledDebugLogger.cs">
+      <Link>ToadicusTools\PooledDebugLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\APIHelpers\PooledObject.cs">
+      <Link>ToadicusTools\PooledObject.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Text\PooledStringBuilder.cs">
+      <Link>ToadicusTools\PooledStringBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Text\SIFormatProvider.cs">
+      <Link>ToadicusTools\SIFormatProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Text\TextTools.cs">
+      <Link>ToadicusTools\TextTools.cs</Link>
+    </Compile>
+    <Compile Include="..\ToadicusTools\Extensions\ConfigNodeExtensions.cs">
+      <Link>ToadicusTools\ConfigNodeExtensions.cs</Link>
     </Compile>
   </ItemGroup>
   <ProjectExtensions>
@@ -101,6 +134,7 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="GameData\EVAManager\" />
+    <Folder Include="ToadicusTools\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GameData\EVAManager\EVAManager.cfg.example" />
