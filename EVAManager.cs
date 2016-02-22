@@ -37,15 +37,18 @@ namespace EVAManager
 	[KSPAddon(KSPAddon.Startup.MainMenu, true)]
 	public class EVAManager : MonoBehaviour
 	{
-		private const string patchPattern = @"^((DELETE|EDIT)_)?EVA_([a-zA-Z_]+)(\[(.+)\])?";
+		private const string patchPattern = @"^((DELETE|EDIT)_)?EVA_([a-zA-Z_]+)(\[(.+)\])?(\:([a-zA-Z]+)\[(.+)\])?";
 		private const int operatorIdx = 2;
 		private const int classIdx = 3;
 		private const int nameIdx = 5;
+		private const int prepositionIdx = 7;
+		private const int conditionIdx = 8;
 
 		private const string empty = "";
 
 		private const string MODULE = "MODULE";
 		private const string RESOURCE = "RESOURCE";
+		private const string WHERE = "WHERE";
 
 		private List<ConfigAction> evaConfigs;
 		private List<ConfigAction> passQueue;
@@ -176,7 +179,7 @@ namespace EVAManager
 						{
 							this.LogDebug("Trying delete action on {0}", action);
 
-							if (action.MatchName == string.Empty)
+							if (action.MatchName == empty)
 							{
 								this.LogWarning("Match name required for 'delete' action but not present; ignoring.");
 								continue;
@@ -210,7 +213,7 @@ namespace EVAManager
 						{
 							this.LogDebug("Trying edit action on {0}", action);
 
-							if (action.MatchName == string.Empty)
+							if (action.MatchName == empty)
 							{
 								this.LogWarning("Match name required for 'edit' action but not present; ignoring.");
 								continue;
@@ -241,7 +244,7 @@ namespace EVAManager
 						action = this.evaConfigs[idx];
 						if (action.Operator == empty)
 						{
-							if (action.MatchName != string.Empty)
+							if (action.MatchName != empty)
 							{
 								this.LogWarning("match name ('{0}') not used for 'add' action; ignoring.",
 									action.MatchName);
