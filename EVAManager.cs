@@ -72,7 +72,7 @@ namespace EVAManager
 			}
 
 			#if DEBUG
-			Logging.DebugLogger log;
+			ToadicusTools.DebugTools.PooledDebugLogger log;
 			#endif
 
 			if (this.passQueue.Count > 0 && this.evaConfigs != null)
@@ -100,11 +100,11 @@ namespace EVAManager
 							evaParts.Add(loadedPart.partPrefab);
 
 							#if DEBUG
-							log = Logging.DebugLogger.New(this);
+							log = ToadicusTools.DebugTools.PooledDebugLogger.New(this);
 
 							log.AppendLine("Modules before run:");
 
-							foreach (var m in evaPart.GetComponents<PartModule>())
+							foreach (var m in loadedPart.partPrefab.GetComponents<PartModule>())
 							{
 								log.Append('\t');
 								log.Append(m.GetType().Name);
@@ -113,7 +113,7 @@ namespace EVAManager
 
 							log.AppendLine("Resources before run:");
 
-							foreach (var r in evaPart.GetComponents<PartResource>())
+							foreach (var r in loadedPart.partPrefab.GetComponents<PartResource>())
 							{
 								log.Append('\t');
 								log.AppendFormat("Name: {0}, amount: {1}, maxAmount: {2}",
@@ -271,25 +271,28 @@ namespace EVAManager
 					break;
 				case Pass.Done:
 					#if DEBUG
-					log = Logging.DebugLogger.New(this);
+					log = ToadicusTools.DebugTools.PooledDebugLogger.New(this);
 
 					log.AppendLine("Modules after run:");
 
-					foreach (var m in evaPart.GetComponents<PartModule>())
+					foreach (var evaPart in this.evaParts)
 					{
-						log.Append('\t');
-						log.Append(m.GetType().Name);
-						log.Append('\n');
-					}
+						foreach (var m in evaPart.GetComponents<PartModule>())
+						{
+							log.Append('\t');
+							log.Append(m.GetType().Name);
+							log.Append('\n');
+						}
 
-					log.AppendLine("Resources after run:");
+						log.AppendLine("Resources after run:");
 
-					foreach (var r in evaPart.GetComponents<PartResource>())
-					{
-						log.Append('\t');
-						log.AppendFormat("Name: {0}, amount: {1}, maxAmount: {2}",
-							r.resourceName, r.amount, r.maxAmount);
-						log.Append('\n');
+						foreach (var r in evaPart.GetComponents<PartResource>())
+						{
+							log.Append('\t');
+							log.AppendFormat("Name: {0}, amount: {1}, maxAmount: {2}",
+								r.resourceName, r.amount, r.maxAmount);
+							log.Append('\n');
+						}
 					}
 
 					log.Print();
