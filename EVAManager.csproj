@@ -23,7 +23,10 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -36,7 +39,10 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>xcopy /y ${TargetFile} ${ProjectDir}\GameData\EVAManager\</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -49,7 +55,10 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="cp -vfa ${TargetFile} ${ProjectDir}/GameData/EVAManager/" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp -vfa ${TargetFile} ${ProjectDir}/GameData/EVAManager/</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -64,7 +73,10 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="cp -vfa ${TargetFile} ${ProjectDir}/GameData/EVAManager/" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp -vfa ${TargetFile} ${ProjectDir}/GameData/EVAManager/</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -79,9 +91,6 @@
     <Reference Include="UnityEngine">
       <HintPath>..\_KSPAssemblies\UnityEngine.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\_KSPAssemblies\KSPUtil.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\_KSPAssemblies\UnityEngine.UI.dll</HintPath>

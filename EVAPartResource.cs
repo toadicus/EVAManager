@@ -39,7 +39,17 @@ namespace EVAManager
 			private set;
 		}
 
-		public void Awake()
+		public EVAPartResource(PartResource res) : base(res)
+		{
+			Setup ();
+		}
+
+		public EVAPartResource(Part p) : base(p)
+		{
+			Setup ();
+		}
+
+		private void Setup()
 		{
 			try
 			{

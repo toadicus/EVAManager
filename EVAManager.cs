@@ -394,7 +394,8 @@ namespace EVAManager
 
 				this.LogDebug("Resource '{0}' is not present.", resourceName);
 
-				PartResource resource = evaPart.gameObject.AddComponent<EVAPartResource>();
+				PartResource resource = new PartResource(evaPart);
+				evaPart.Resources.Add (resource);
 
 				this.LogDebug("Resource '{0}' component built.", resourceName);
 
@@ -431,8 +432,12 @@ namespace EVAManager
 
 			if (resource != null)
 			{
-				evaPart.Resources.list.Remove(resource);
-				GameObject.Destroy(resource);
+				int idx = evaPart.Resources.dict.IndexOf (resource);
+
+				if (idx > -1)
+				{
+					evaPart.Resources.dict.Remove (idx);
+				}
 
 				this.Log("Removed resource {0} from {1} and marked for destruction.", matchName, evaPart);
 			}
@@ -480,7 +485,7 @@ namespace EVAManager
 				{
 					config = this.mergeConfigs(resource, config);
 
-					GameObject.Destroy(resource);
+					this.delResourceByName (evaPart, matchName);
 
 					this.LogDebug("EVA resource {0} marked for destruction.", resource.resourceName);
 
@@ -526,21 +531,22 @@ namespace EVAManager
 		{
 			Regex rgx = new Regex(@matchName);
 
-			PartResource[] resources = evaPart.GetComponents<PartResource>();
+			var enumerator = evaPart.Resources.GetEnumerator ();
 			PartResource resource;
-			for (int idx = 0; idx < resources.Length; idx++)
-			{
-				resource = resources[idx];
-				Match match = rgx.Match(resource.resourceName);
 
-				Logging.PostDebugMessage(
+			while (enumerator.MoveNext())
+			{
+				resource = enumerator.Current;
+
+				Match match = rgx.Match (resource.resourceName);
+
+				Logging.PostDebugMessage (
 					this,
 					"EVA resource {0} is {1}a match for action.",
 					resource.resourceName,
 					match.Success ? "" : "not ");
 
-				if (match.Success)
-				{
+				if (match.Success) {
 					return resource;
 				}
 			}
