@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug_win</Configuration>
@@ -139,11 +139,11 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup>
-    <Folder Include="GameData\EVAManager\" />
-    <Folder Include="ToadicusTools\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="GameData\EVAManager\EVAManager.cfg.example" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y $(TargetPath) $(ProjectDir)GameData\$(ProjectName)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
